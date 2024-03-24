@@ -11,6 +11,7 @@ import ExpandableText from "./components/ExpandableText";
 import Form from "./components/Form";
 import FormWithStateHook from "./components/FormWithStateHook";
 import FormWithFormHook from "./components/FormWithFormHook";
+import FormValidateWithZod from "./components/FormValidateWithZod";
 
 function App() {
   const cities = ["Pune", "Mumbai", "Hyderabad", "Latur"];
@@ -71,6 +72,8 @@ function App() {
         <FormWithStateHook />
         <h4>form using useForm hook</h4>
         <FormWithFormHook />
+        <h4>form using Zod Validation</h4>
+        <FormValidateWithZod />
       </div>
     </div>
   );
