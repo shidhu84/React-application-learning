@@ -16,7 +16,7 @@ function FormValidateWithZod() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
   console.log(register("name"));
   const submit = (data: FieldValues) => console.log(data);
@@ -46,7 +46,9 @@ function FormValidateWithZod() {
         />
         {errors.age && <p className="text-danger">{errors.age.message}</p>}
       </div>
-      <button className="btn btn-primary">Submit</button>
+      <button disabled={!isValid} className="btn btn-primary">
+        Submit
+      </button>
     </form>
   );
 }

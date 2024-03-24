@@ -12,7 +12,9 @@ import Form from "./components/Form";
 import FormWithStateHook from "./components/FormWithStateHook";
 import FormWithFormHook from "./components/FormWithFormHook";
 import FormValidateWithZod from "./components/FormValidateWithZod";
-
+import AddExpense from "./expense-tracker/components/AddExpense";
+import ExpenseList from "./expense-tracker/components/ExpenseList";
+import ExpenseFilter from "./expense-tracker/ExpenseFilter";
 function App() {
   const cities = ["Pune", "Mumbai", "Hyderabad", "Latur"];
   const handleSelectItem = (item: string) => console.log(item);
@@ -21,9 +23,49 @@ function App() {
     "product2",
     "product3",
   ]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [expenses, updateExpenses] = useState([
+    { id: 1, description: "Milk", amount: 30, category: "groceries" },
+    { id: 2, description: "Movie", amount: 50, category: "entartainment" },
+    { id: 3, description: "Electricity", amount: 60, category: "utilities" },
+    { id: 4, description: "Clothes", amount: 70, category: "utilities" },
+  ]);
+
+  const visibleExpenses = selectedCategory
+    ? expenses.filter((expense) => expense.category === selectedCategory)
+    : expenses;
+
   return (
     <div>
-      <ListGroup
+      <div>
+        <h4>Expense Tracker</h4>
+        <div className="mb-3">
+          <AddExpense
+            onAddExpense={(data) =>
+              updateExpenses([
+                ...expenses,
+                {
+                  ...data,
+                  id: expenses.length + 1,
+                },
+              ])
+            }
+          />
+        </div>
+        <div className="mb-3">
+          <ExpenseFilter
+            onSelectCategory={(category) => setSelectedCategory(category)}
+          />
+        </div>
+        <ExpenseList
+          expenses={visibleExpenses}
+          onDelete={(id) =>
+            updateExpenses(expenses.filter((expense) => expense.id !== id))
+          }
+        />
+        {/* <AddExpense /> */}
+      </div>
+      {/* <ListGroup
         items={cities}
         heading="cities"
         onSelectItem={handleSelectItem}
@@ -74,7 +116,7 @@ function App() {
         <FormWithFormHook />
         <h4>form using Zod Validation</h4>
         <FormValidateWithZod />
-      </div>
+      </div> */}
     </div>
   );
 }
