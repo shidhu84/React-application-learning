@@ -10,6 +10,7 @@ import StateModification from "./components/StateModification";
 import ExpandableText from "./components/ExpandableText";
 import Form from "./components/Form";
 import FormWithStateHook from "./components/FormWithStateHook";
+import FormWithFormHook from "./components/FormWithFormHook";
 
 function App() {
   const cities = ["Pune", "Mumbai", "Hyderabad", "Latur"];
@@ -64,9 +65,12 @@ function App() {
       </div>
       <div>
         <h1>React Forms</h1>
+        <h4>Form creation</h4>
         <Form />
-        <h2>form using useState</h2>
+        <h4>form using useState</h4>
         <FormWithStateHook />
+        <h4>form using useForm hook</h4>
+        <FormWithFormHook />
       </div>
     </div>
   );
