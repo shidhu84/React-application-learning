@@ -7,6 +7,8 @@ import ListGroup from "./components/ListGroup";
 import NavBar from "./components/NavBar";
 import ProductList from "./components/ProductList";
 import StateModification from "./components/StateModification";
+import ExpandableText from "./components/ExpandableText";
+import Form from "./components/Form";
 
 function App() {
   const cities = ["Pune", "Mumbai", "Hyderabad", "Latur"];
@@ -42,6 +44,26 @@ function App() {
             setProducts([]);
           }}
         />
+        <div>
+          <ExpandableText maxChars={20}>
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Temporibus
+            cumque natus sint molestias mollitia, sequi illum doloremque libero
+            quam? Placeat repellat nam aliquid ea expedita quod iusto doloribus
+            ipsa dolore architecto rerum veritatis, minima fugiat magni quas est
+            dolor. Sint nihil facilis ab aliquam, accusantium aut facere aperiam
+            dolores veritatis laudantium quos iure nulla voluptatibus similique
+            nemo alias, reiciendis quia quam ullam inventore consequatur magni
+            numquam? Quo, aliquam ab labore corporis laboriosam ducimus sapiente
+            iure, dignissimos architecto, minus beatae! Deserunt iusto tenetur
+            earum aspernatur quod perspiciatis doloribus obcaecati vero
+            recusandae nulla veritatis numquam, quia aperiam labore repellat
+            quaerat odit exercitationem.
+          </ExpandableText>
+        </div>
+      </div>
+      <div>
+        <h1>React Forms</h1>
+        <Form />
       </div>
     </div>
   );
