@@ -9,6 +9,7 @@ import ProductList from "./components/ProductList";
 import StateModification from "./components/StateModification";
 import ExpandableText from "./components/ExpandableText";
 import Form from "./components/Form";
+import FormWithStateHook from "./components/FormWithStateHook";
 
 function App() {
   const cities = ["Pune", "Mumbai", "Hyderabad", "Latur"];
@@ -64,6 +65,8 @@ function App() {
       <div>
         <h1>React Forms</h1>
         <Form />
+        <h2>form using useState</h2>
+        <FormWithStateHook />
       </div>
     </div>
   );
