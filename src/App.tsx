@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import Alert from "./components/Alert";
 import AlertButton from "./components/AlertButton";
@@ -15,29 +15,127 @@ import FormValidateWithZod from "./components/FormValidateWithZod";
 import AddExpense from "./expense-tracker/components/AddExpense";
 import ExpenseList from "./expense-tracker/components/ExpenseList";
 import ExpenseFilter from "./expense-tracker/ExpenseFilter";
-function App() {
-  const cities = ["Pune", "Mumbai", "Hyderabad", "Latur"];
-  const handleSelectItem = (item: string) => console.log(item);
-  const [products, setProducts] = useState([
-    "product1",
-    "product2",
-    "product3",
-  ]);
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [expenses, updateExpenses] = useState([
-    { id: 1, description: "Milk", amount: 30, category: "groceries" },
-    { id: 2, description: "Movie", amount: 50, category: "entartainment" },
-    { id: 3, description: "Electricity", amount: 60, category: "utilities" },
-    { id: 4, description: "Clothes", amount: 70, category: "utilities" },
-  ]);
 
-  const visibleExpenses = selectedCategory
-    ? expenses.filter((expense) => expense.category === selectedCategory)
-    : expenses;
+// user CRUD using external API
+import apiClient from "./services/apiClient";
+import userService, { User } from "./services/userService";
+function App() {
+  // const cities = ["Pune", "Mumbai", "Hyderabad", "Latur"];
+  // const handleSelectItem = (item: string) => console.log(item);
+  // const [products, setProducts] = useState([
+  //   "product1",
+  //   "product2",
+  //   "product3",
+  // ]);
+  // const [selectedCategory, setSelectedCategory] = useState("");
+  // const [expenses, updateExpenses] = useState([
+  //   { id: 1, description: "Milk", amount: 30, category: "groceries" },
+  //   { id: 2, description: "Movie", amount: 50, category: "entartainment" },
+  //   { id: 3, description: "Electricity", amount: 60, category: "utilities" },
+  //   { id: 4, description: "Clothes", amount: 70, category: "utilities" },
+  // ]);
+
+  // const visibleExpenses = selectedCategory
+  //   ? expenses.filter((expense) => expense.category === selectedCategory)
+  //   : expenses;
+  const [users, setUsers] = useState<User[]>([]);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    userService
+      .getAll<User>()
+      .then((res) => {
+        setUsers(res.data);
+      })
+      .catch((err) => {
+        setError(err.message);
+      });
+  }, []);
+
+  const deleteHandler = (id: number) => {
+    const originalUsers = [...users];
+    setUsers(users.filter((user) => user.id !== id));
+    userService.delete(id).catch((err) => {
+      setError(err.message);
+      setUsers(originalUsers);
+    });
+  };
+
+  const updateHandler = (user: User) => {
+    const originalUsers = [...users];
+    const updateUser = {
+      ...user,
+      name: user.name + "!!",
+    };
+    setUsers(users.map((u) => (u.id === user.id ? updateUser : u)));
+    userService.update(user).catch((err) => {
+      setError(err.message);
+      setLoading(false);
+      setUsers(originalUsers);
+    });
+  };
+
+  const addUserhandler = () => {
+    const originalUsers = [...users];
+    const user: User = {
+      id: 0,
+      name: "sidhu yenure",
+    };
+    setUsers([
+      {
+        ...user,
+      },
+      ...users,
+    ]);
+    userService
+      .add(user)
+      .then(({ data: savedUser }) => {
+        setUsers([savedUser, ...users]);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setLoading(false);
+        setUsers(originalUsers);
+      });
+  };
 
   return (
     <div>
       <div>
+        <h4>User List using exteernal api's</h4>
+        {error && <p className="text-danger">{error}</p>}
+        <div className="mb-3">
+          <button className="btn btn-primary" onClick={() => addUserhandler()}>
+            Add
+          </button>
+        </div>
+        <ul className="list-group">
+          {users.map((user) => (
+            <li
+              key={user.id}
+              className="list-group-item d-flex justify-content-between"
+            >
+              {user.name}
+              <div>
+                <button
+                  className="btn btn-outline-secondary mx-1"
+                  onClick={() => updateHandler(user)}
+                >
+                  Update
+                </button>
+                <button
+                  className="btn btn-outline-danger"
+                  onClick={() => deleteHandler(user.id)}
+                >
+                  Delete
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+      {/* <div>
         <h4>Expense Tracker</h4>
         <div className="mb-3">
           <AddExpense
@@ -63,8 +161,7 @@ function App() {
             updateExpenses(expenses.filter((expense) => expense.id !== id))
           }
         />
-        {/* <AddExpense /> */}
-      </div>
+      </div> */}
       {/* <ListGroup
         items={cities}
         heading="cities"
